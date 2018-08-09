@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste js</title>   
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+</head>
+    
+<body>
+    <div ng-app="myApp" ng-controller="myController">
+    <p>Tempo Online: {{tempoOnline}}</p>
+    <p>Tempo Iniciado: {{tempoIniciado}}</p>
+    <p>Número de Conexões: {{numConexoes}}</p>
+<!--
+    </div>
+    <div ng-app="myApp" ng-controller="myController">
+    Tempo Iniciado: {{tempoIniciado}}
+
+    </div>
+    <div ng-app="myApp" ng-controller="myController">
+    Numero de Conexoes: {{numConexoes}}
+
+    </div>
+    -->
+</body>
+
+        <script>
+                var myapp = angular.module('myApp', []);
+                myapp.controller('myController', function ($scope, $http){
+                    this.interval = setInterval(function(){
+                        $http.get("http://localhost:6969/virtual/telemetria/status.json")
+                        .then(function (response) {
+                        //    console.log(response.data.numConexoes)
+                        $scope.numConexoes = response.data.numConexoes
+                        $scope.tempoOnline = response.data.tempoOnline
+                        $scope.tempoIniciado = response.data.tempoIniciado
+                        console.log(response)
+                    });
+                    }, 1000);
+                    this.endLongPolling = function(){ clearInterval(this.interval);};
+                });
+        </script>
+
+</html>
